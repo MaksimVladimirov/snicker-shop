@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import DrawerHead from './DrawerHead.vue'
 import CartItemList from './CartItemList.vue'
 </script>

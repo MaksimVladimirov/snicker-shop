@@ -1,12 +1,14 @@
-<script setup>
+<script setup lang="ts">
 defineProps({
+    //@ts-ignore
   title: String,
   imageUrl: String,
   price: Number,
   isFavorite: Boolean,
   isAdded: Boolean,
-  onCLickAdd: Function,
-  onCLickFavorite: Function
+  id: Number,
+  onCLickAdd: Function as any as (payload: MouseEvent) => void,
+  onCLickFavorite: Function as any as (payload: MouseEvent) => void
 })
 </script>
 

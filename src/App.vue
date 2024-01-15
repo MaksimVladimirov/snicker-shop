@@ -1,29 +1,43 @@
-<script setup>
+<script setup lang="ts">
 import { onMounted, reactive, ref, watch } from 'vue'
 import axios from 'axios'
-import Header from './components/Header.vue'
 import CardList from './components/CardList.vue'
-import Drawer from './components/Drawer.vue'
+import Header from './components/Header.vue'
+// import Drawer from './components/Drawer.vue'
 
 const items = ref([])
 const filters = reactive({
   sortBy: 'title',
   searchQuery: ''
 })
-
+ // @ts-ignore
 const onChangeSelect = (event) => {
   filters.sortBy = event.target.value
 }
 
 const fetchFavorites = async () => {
-    try {
-    const { data } = await axios.get('https://9e5263ce0c7354f2.mokky.dev/favorites')
-    items.value = data
+  try {
+    const { data: favorites } = await axios.get('https://19ce0717f24b28a6.mokky.dev/favorites')
+     // @ts-ignore
+    items.value = items.value.map((item) => {
+         // @ts-ignore
+      const favorite = favorites.find((favorite) => favorite.id === item.id)
+      if (!favorite) {
+        return item
+      }
+
+      return {
+         // @ts-ignore
+        ...item,
+        isFavorite: true,
+        favoriteId: favorite.id
+      }
+    })
   } catch (error) {
     console.log(error)
   }
 }
-
+ // @ts-ignore
 const onChangeSearchInput = (event) => {
   filters.searchQuery = event.target.value
 }
@@ -35,18 +49,31 @@ const fetchItems = async () => {
     }
 
     if (filters.searchQuery) {
+        // @ts-ignore
       params.title = `*${filters.searchQuery}*`
     }
     const { data } = await axios.get('https://9e5263ce0c7354f2.mokky.dev/sneakers', {
       params
     })
-    items.value = data
+     // @ts-ignore
+    items.value = data.map((obj) => ({
+      ...obj,
+      isFavorite: false,
+      isAdded: false
+    }))
   } catch (error) {
     console.log(error)
   }
 }
+ // @ts-ignore
+const addToFavorite = async (item) => {
+  item.isFavorite = !item.isFavorite
+}
 
-onMounted(fetchItems)
+onMounted(async () => {
+  await fetchItems()
+  await fetchFavorites()
+})
 watch(filters, fetchItems)
 </script>
 
@@ -74,7 +101,7 @@ watch(filters, fetchItems)
         </div>
       </div>
       <div class="mt-10">
-        <CardList :items="items" />
+        <CardList :items="items" @addToFavorite="addToFavorite" />
       </div>
     </div>
   </div>
