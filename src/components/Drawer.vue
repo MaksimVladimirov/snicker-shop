@@ -1,6 +1,6 @@
 <script setup>
 import DrawerHead from './DrawerHead.vue'
-import CartItem from './CartItem.vue'
+import CartItemList from './CartItemList.vue'
 </script>
 
 <template>
@@ -8,6 +8,24 @@ import CartItem from './CartItem.vue'
   <div class="bg-white w-96 h-full fixed right-0 top-0 z-20 p-8">
     <div></div>
     <DrawerHead />
-    <CartItem />
+    <CartItemList />
+    <div class="flex flex-col gap-4 mt-7">
+      <div class="flex gap-2">
+        <span>Итого:</span>
+        <div class="flex-1 border-b border-dashed"></div>
+        <b>12990 P</b>
+      </div>
+
+      <div class="flex gap-2">
+        <span>Налог 5%:</span>
+        <div class="flex-1 border-b border-dashed"></div>
+        <b>900 Р</b>
+      </div>
+      <button
+        class="mt-4 bg-lime-500 w-full rounded-xl py-3 text-white transition hover:bg-lime-600 action:bg-lime-700 disabled:bg-slate-300 cursor-pointer"
+      >
+        Оформить заказ
+      </button>
+    </div>
   </div>
 </template>

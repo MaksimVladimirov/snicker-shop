@@ -1,5 +1,5 @@
 <template>
-  <div class="flex items-center gap-3">
+  <div class="flex items-center gap-3 mb-8">
     <svg
       class="opacity-30 cursor-pointer rotate-180 hover:opacity-100 transition hover:-translate-1"
       width="16"
