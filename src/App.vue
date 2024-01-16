@@ -2,10 +2,20 @@
 import { onMounted, provide, reactive, ref, watch } from 'vue'
 import axios from 'axios'
 import CardList from './components/CardList.vue'
+// @ts-ignore
 import Header from './components/Header.vue'
-// import Drawer from './components/Drawer.vue'
+import Drawer from './components/Drawer.vue'
 
 const items = ref([])
+const cart = ref([])
+const isDrawerOpen = ref(false)
+
+const closeDrawer = () => {
+  isDrawerOpen.value = false
+}
+const openDrawer = () => {
+  isDrawerOpen.value = true
+}
 const filters = reactive({
   sortBy: 'title',
   searchQuery: ''
@@ -13,6 +23,16 @@ const filters = reactive({
 // @ts-ignore
 const onChangeSelect = (event) => {
   filters.sortBy = event.target.value
+}
+
+const addToCart = (item) => {
+  if (!item.isAdded) {
+    cart.value.push(item)
+    item.isAdded = true
+  } else {
+    cart.value.splice(cart.value.indexOf(item), 1)
+    item.isAdded = false
+  }
 }
 
 const fetchFavorites = async () => {
@@ -34,7 +54,7 @@ const fetchFavorites = async () => {
       }
     })
   } catch (error) {
-    console.log(error)
+    console.error(error)
   }
 }
 // @ts-ignore
@@ -63,7 +83,7 @@ const fetchItems = async () => {
       favoriteId: null
     }))
   } catch (error) {
-    console.log(error)
+    console.error(error)
   }
 }
 // @ts-ignore
@@ -82,7 +102,7 @@ const addToFavorite = async (item) => {
       item.favoriteId = null
     }
   } catch (err) {
-    console.log(err)
+    console.error(err)
   }
 }
 
@@ -90,13 +110,20 @@ onMounted(async () => {
   await fetchItems()
   await fetchFavorites()
 })
+
 watch(filters, fetchItems)
+
+provide('cartActions', {
+  closeDrawer,
+  openDrawer
+})
 </script>
 
 <template>
-  <!-- <Drawer /> -->
+  <Drawer v-if="isDrawerOpen" />
+
   <div class="bg-white w-4/5 m-auto rounded-xl shadow-xl mt-14">
-    <Header />
+    <Header @open-drawer="openDrawer" />
     <div class="p-10">
       <div class="flex justify-between items-center">
         <h2 class="text-3xl font-bold mb-8">Все кросовки</h2>
@@ -117,7 +144,7 @@ watch(filters, fetchItems)
         </div>
       </div>
       <div class="mt-10">
-        <CardList :items="items" @addToFavorite="addToFavorite" />
+        <CardList :items="items" @add-to-favorite="addToFavorite" @add-to-cart="addToCart" />
       </div>
     </div>
   </div>
