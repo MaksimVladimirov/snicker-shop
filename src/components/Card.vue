@@ -1,6 +1,6 @@
 <script setup lang="ts">
 defineProps({
-    //@ts-ignore
+  //@ts-ignore
   title: String,
   imageUrl: String,
   price: Number,
@@ -8,7 +8,7 @@ defineProps({
   isAdded: Boolean,
   id: Number,
   onCLickAdd: Function as any as (payload: MouseEvent) => void,
-  onCLickFavorite: Function as any as (payload: MouseEvent) => void
+  onClickFavorite: Function as any as (payload: MouseEvent) => void
 })
 </script>
 
@@ -20,7 +20,7 @@ defineProps({
       :src="!isFavorite ? '/like-1.svg' : '/like-2.svg'"
       alt="Like"
       class="absolute top-8 left-8"
-      @click="onCLickFavorite"
+      @click="onClickFavorite"
     />
     <img :src="imageUrl" alt="Sneaker" />
     <p class="mt-5">{{ title }}</p>

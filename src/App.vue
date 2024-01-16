@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, reactive, ref, watch } from 'vue'
+import { onMounted, provide, reactive, ref, watch } from 'vue'
 import axios from 'axios'
 import CardList from './components/CardList.vue'
 import Header from './components/Header.vue'
@@ -10,7 +10,7 @@ const filters = reactive({
   sortBy: 'title',
   searchQuery: ''
 })
- // @ts-ignore
+// @ts-ignore
 const onChangeSelect = (event) => {
   filters.sortBy = event.target.value
 }
@@ -18,16 +18,16 @@ const onChangeSelect = (event) => {
 const fetchFavorites = async () => {
   try {
     const { data: favorites } = await axios.get('https://19ce0717f24b28a6.mokky.dev/favorites')
-     // @ts-ignore
+    // @ts-ignore
     items.value = items.value.map((item) => {
-         // @ts-ignore
+      // @ts-ignore
       const favorite = favorites.find((favorite) => favorite.id === item.id)
       if (!favorite) {
         return item
       }
 
       return {
-         // @ts-ignore
+        // @ts-ignore
         ...item,
         isFavorite: true,
         favoriteId: favorite.id
@@ -37,7 +37,7 @@ const fetchFavorites = async () => {
     console.log(error)
   }
 }
- // @ts-ignore
+// @ts-ignore
 const onChangeSearchInput = (event) => {
   filters.searchQuery = event.target.value
 }
@@ -49,25 +49,41 @@ const fetchItems = async () => {
     }
 
     if (filters.searchQuery) {
-        // @ts-ignore
+      // @ts-ignore
       params.title = `*${filters.searchQuery}*`
     }
     const { data } = await axios.get('https://9e5263ce0c7354f2.mokky.dev/sneakers', {
       params
     })
-     // @ts-ignore
+    // @ts-ignore
     items.value = data.map((obj) => ({
       ...obj,
       isFavorite: false,
-      isAdded: false
+      isAdded: false,
+      favoriteId: null
     }))
   } catch (error) {
     console.log(error)
   }
 }
- // @ts-ignore
+// @ts-ignore
 const addToFavorite = async (item) => {
-  item.isFavorite = !item.isFavorite
+  try {
+    if (!item.isFavorite) {
+      const obj = {
+        parentId: item.id
+      }
+      item.isFavorite = true
+      const { data } = await axios.post('https://19ce0717f24b28a6.mokky.dev/favorites', obj)
+      item.favoriteId = data.id
+    } else {
+      item.isFavorite = false
+      await axios.delete(`https://19ce0717f24b28a6.mokky.dev/favorites/${item.favoriteId}`)
+      item.favoriteId = null
+    }
+  } catch (err) {
+    console.log(err)
+  }
 }
 
 onMounted(async () => {

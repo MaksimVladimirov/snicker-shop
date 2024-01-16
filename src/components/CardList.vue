@@ -3,11 +3,11 @@ import Card from './Card.vue'
 
 defineProps({
   items: Array as () => Array<{
-    id: number;
-    imageUrl: string;
-    title: string;
-    price: number;
-    isFavorite: boolean;
+    id: number
+    imageUrl: string
+    title: string
+    price: number
+    isFavorite: boolean
   }>,
   addToFavorite: Function
 })
