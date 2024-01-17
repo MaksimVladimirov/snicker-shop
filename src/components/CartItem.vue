@@ -1,23 +1,23 @@
 <script setup lang="ts">
+const emit = defineEmits(['onClickRemove'])
+
 defineProps({
   title: String,
   imageUrl: String,
   price: Number,
-  isFavorite: Boolean,
-  isAdded: Boolean,
-  onCLickAdd: Function,
-  onCLickFavorite: Function
+  id: Number
 })
 </script>
 
 <template>
   <div class="flex border border-slate-200 p-4 rounded-xl gap-4 mt-4">
-    <img class="w-16 h-16" src="/sneakers/sneakers-1.jpg" alt="Sneaker" />
-    <div class="flex flex-col justify-between">
-      <p>Кросовка nike air max 280</p>
+    <img class="w-16 h-16" :src="imageUrl" :alt="title" />
+    <div class="flex flex-col flex-1">
+      <p>{{ title }}</p>
       <div class="flex justify-between mt-2">
-        <b>12 990 rub</b>
+        <b class="flex-1">{{ price }}rub</b>
         <img
+          @click="emit('onClickRemove')"
           class="opacity-40 hover:opacity-100 cursor-pointer transition"
           src="/close.svg"
           alt=""

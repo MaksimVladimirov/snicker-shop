@@ -2,7 +2,7 @@
 import { inject } from 'vue'
 
 // @ts-ignore
-const { closeDrawer } = inject('cartActions')
+const { closeDrawer } = inject('cart')
 </script>
 
 <template>
