@@ -1,15 +1,38 @@
 <script setup lang="ts">
+import axios from 'axios'
 import DrawerHead from './DrawerHead.vue'
 import CartItemList from './CartItemList.vue'
 import InfoBlock from './InfoBlock.vue'
+import { ref, inject, computed } from 'vue'
 
-defineProps({
+const props = defineProps({
   totalPrice: Number,
-  vatPrice: Number,
-  isButtonDisabled: Boolean
+  vatPrice: Number
 })
+//@ts-ignore
+const { cart, closeDrawer } = inject('cart')
+const isButtonDisabled = computed(() => isCreating.value || cartIsEmpty.value)
+const cartIsEmpty = computed(() => cart.value.length === 0)
+const isCreating = ref(false)
+const orderId = ref(null)
+const createOrder = async () => {
+  try {
+    isCreating.value = true
+    const { data } = await axios.post(`https://9e5263ce0c7354f2.mokky.dev/orders`, {
+      items: cart.value,
+//@ts-ignore
+      totalPrice: props.totalPrice.value
+    })
 
-const emit = defineEmits(['createOrder'])
+    cart.value = []
+    orderId.value = data.id
+    return data
+  } catch (err) {
+    console.error(err)
+  } finally {
+    isCreating.value = false
+  }
+}
 </script>
 
 <template>
@@ -18,11 +41,18 @@ const emit = defineEmits(['createOrder'])
     <div></div>
     <DrawerHead />
 
-    <div v-if="!totalPrice" class="flex h-full items-center">
+    <div v-if="!totalPrice || orderId" class="flex h-full items-center">
       <InfoBlock
+        v-if="!totalPrice && !orderId"
         title="Корзина пустая"
         description="Добавьте хотя бы одну пару кроссовок, чтобы сделать заказ."
         image-url="/package-icon.png"
+      />
+      <InfoBlock
+        v-if="orderId"
+        title="Заказ оформлен"
+        :description="`Ваш заказ #${orderId} будет отправлен в ближайшее время`"
+        image-url="/order-success-icon.png"
       />
     </div>
 
@@ -42,7 +72,7 @@ const emit = defineEmits(['createOrder'])
         </div>
         <button
           :disabled="isButtonDisabled"
-          @click="() => emit('createOrder')"
+          @click="createOrder"
           class="mt-4 bg-lime-500 w-full rounded-xl py-3 text-white transition hover:bg-lime-600 action:bg-lime-700 disabled:bg-slate-300 cursor-pointer"
         >
           Оформить заказ

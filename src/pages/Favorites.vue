@@ -11,9 +11,8 @@ onMounted(async () => {
     const { data } = await axios.get(
       'https://9e5263ce0c7354f2.mokky.dev/favorites?_relations=sneakers'
     )
-    console.log(data)
+    //@ts-ignore
     favorites.value = data.map((obj) => obj.sneaker)
-    console.log(favorites)
   } catch (err) {
     console.error(err)
   }
