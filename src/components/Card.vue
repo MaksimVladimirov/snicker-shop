@@ -1,6 +1,6 @@
 <script setup lang="ts">
 defineProps({
-  //@ts-ignore
+    //@ts-ignore
   title: String,
   imageUrl: String,
   price: Number,

@@ -4,25 +4,35 @@ import DrawerHead from './DrawerHead.vue'
 import CartItemList from './CartItemList.vue'
 import InfoBlock from './InfoBlock.vue'
 import { ref, inject, computed } from 'vue'
+import type { SnickersInfo } from '@/pages/Home.vue'
 
 const props = defineProps({
   totalPrice: Number,
   vatPrice: Number
 })
-//@ts-ignore
-const { cart, closeDrawer } = inject('cart')
+
+const { cart } = inject('cart') as {
+  cart: SnickersInfo[]
+}
 const isButtonDisabled = computed(() => isCreating.value || cartIsEmpty.value)
+//@ts-ignore
+
 const cartIsEmpty = computed(() => cart.value.length === 0)
 const isCreating = ref(false)
 const orderId = ref(null)
+
 const createOrder = async () => {
   try {
     isCreating.value = true
     const { data } = await axios.post(`https://9e5263ce0c7354f2.mokky.dev/orders`, {
+      //@ts-ignore
+
       items: cart.value,
-//@ts-ignore
+      //@ts-ignore
+
       totalPrice: props.totalPrice.value
     })
+    //@ts-ignore
 
     cart.value = []
     orderId.value = data.id
@@ -40,7 +50,6 @@ const createOrder = async () => {
   <div class="bg-white w-96 h-full fixed right-0 top-0 z-20 p-8">
     <div></div>
     <DrawerHead />
-
     <div v-if="!totalPrice || orderId" class="flex h-full items-center">
       <InfoBlock
         v-if="!totalPrice && !orderId"

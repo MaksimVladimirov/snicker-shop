@@ -1,11 +1,12 @@
-import './assets/main.css'
-
 import { createApp } from 'vue'
 import { createRouter, createWebHistory } from 'vue-router'
 import { autoAnimatePlugin } from '@formkit/auto-animate/vue'
+import { createPinia } from 'pinia';
+
 import App from './App.vue'
 import Home from './pages/Home.vue'
 import Favorites from './pages/Favorites.vue'
+import './assets/main.css'
 
 const app = createApp(App)
 const routes = [
@@ -16,6 +17,9 @@ const router = createRouter({
   history: createWebHistory(),
   routes
 })
+const pinia = createPinia()
+
 app.use(router)
 app.use(autoAnimatePlugin)
+app.use(pinia)
 app.mount('#app')

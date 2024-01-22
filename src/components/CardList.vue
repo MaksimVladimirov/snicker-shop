@@ -1,21 +1,23 @@
 <script setup lang="ts">
+import type { SnickersInfo } from '@/pages/Home.vue'
 import Card from './Card.vue'
+import { useCartStore } from '@/store/CartStore'
+
+const { addToCart, removeFromCart, addToFavorite } = useCartStore()
 
 defineProps({
-  items: Array as () => Array<{
-    id: number
-    imageUrl: string
-    title: string
-    price: number
-    isFavorite: boolean
-    isAdded: boolean
-  }>,
-  addToFavorite: Function,
-  addToCart: Function,
+  items: Array<SnickersInfo>,
   isFavorites: Boolean
 })
 
-const emit = defineEmits(['addToFavorite', 'addToCart'])
+const onClickAddPlus = (item: SnickersInfo) => {
+  if (!item.isAdded) {
+    addToCart(item)
+  } else {
+    removeFromCart(item)
+  }
+}
+
 </script>
 
 <template>
@@ -27,8 +29,8 @@ const emit = defineEmits(['addToFavorite', 'addToCart'])
       :imageUrl="item.imageUrl"
       :title="item.title"
       :price="item.price"
-      :onClickFavorite="isFavorites ? null : () => emit('addToFavorite', item)"
-      :onClickAdd="isFavorites ? null : () => emit('addToCart', item)"
+      :onClickFavorite="isFavorites ? null : () => addToFavorite(item)"
+      :onClickAdd="isFavorites ? null : () => onClickAddPlus(item)"
       :isFavorite="item.isFavorite"
       :isAdded="item.isAdded"
     />

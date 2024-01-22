@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import { inject } from 'vue'
 import CartItem from './CartItem.vue'
+import { useCartStore } from '@/store/CartStore';
 
-//@ts-ignore
-const { cart, removeFromCart } = inject('cart')
+const { cart, removeFromCart } = useCartStore()
 </script>
 
 <template>

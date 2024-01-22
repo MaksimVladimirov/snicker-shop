@@ -1,122 +1,53 @@
 <script setup lang="ts">
-import axios from 'axios'
-import { inject, onMounted, reactive, ref, watch } from 'vue'
+import { onMounted, reactive, watch } from 'vue'
+import { storeToRefs } from 'pinia'
 import CardList from '../components/CardList.vue'
+import { useSneakersStore } from '../store/SneakersStore'
+import { useCartStore } from '@/store/CartStore'
 
-// @ts-ignore
-const { addToCart, removeFromCart, cart } = inject('cart')
-const items = ref([])
+const { items, filters } = storeToRefs(useSneakersStore())
+const { fetchItems, fetchFavorites } = useSneakersStore()
 
-const filters = reactive({
-  sortBy: 'title',
-  searchQuery: ''
-})
+const { cart } = storeToRefs(useCartStore())
 
-const fetchFavorites = async () => {
-  try {
-    const { data: favorites } = await axios.get('https://9e5263ce0c7354f2.mokky.dev/favorites')
-    // @ts-ignore
-    items.value = items.value.map((item) => {
-      // @ts-ignore
-      const favorite = favorites.find((favorite) => favorite.sneaker_id === item.id)
-      if (!favorite) {
-        return item
-      }
+export interface SnickersInfo {
+  id: number
+  title: string
+  price: number
+  imageUrl: string
+  isFavorite?: boolean
+  isAdded?: boolean
+  favoriteId?: null | number
+}
 
-      return {
-        // @ts-ignore
-        ...item,
-        isFavorite: true,
-        favoriteId: favorite.id
-      }
-    })
-  } catch (error) {
-    console.error(error)
+export interface FavoritesInfo {
+  sneaker_id: number
+  id: number
+}
+
+const onChangeSearchInput = (event: Event) => {
+  if (event.target instanceof HTMLInputElement) {
+    filters.value.searchQuery = event.target.value
   }
 }
 
-const fetchItems = async () => {
-  try {
-    const params = {
-      sortBy: filters.sortBy
-    }
-
-    if (filters.searchQuery) {
-      // @ts-ignore
-      params.title = `*${filters.searchQuery}*`
-    }
-    const { data } = await axios.get('https://9e5263ce0c7354f2.mokky.dev/sneakers', {
-      params
-    })
-    // @ts-ignore
-    items.value = data.map((obj) => ({
-      ...obj,
-      isFavorite: false,
-      isAdded: false,
-      favoriteId: null
-    }))
-  } catch (error) {
-    console.error(error)
+const onChangeSelect = (event: Event) => {
+  if (event.target instanceof HTMLSelectElement) {
+    filters.value.sortBy = event.target.value
   }
-}
-// @ts-ignore
-const onClickAddPlus = (item) => {
-  if (!item.isAdded) {
-    addToCart(item)
-  } else {
-    removeFromCart(item)
-  }
-}
-
-// @ts-ignore
-const onChangeSelect = (event) => {
-  filters.sortBy = event.target.value
-}
-
-// @ts-ignore
-const addToFavorite = async (item) => {
-  try {
-    if (!item.isFavorite) {
-      const obj = {
-        sneaker_id: item.id
-      }
-      item.isFavorite = true
-      const { data } = await axios.post('https://9e5263ce0c7354f2.mokky.dev/favorites', obj)
-      item.favoriteId = data.id
-    } else {
-      item.isFavorite = false
-      await axios.delete(`https://9e5263ce0c7354f2.mokky.dev/favorites/${item.favoriteId}`)
-      item.favoriteId = null
-    }
-  } catch (err) {
-    console.error(err)
-  }
-}
-
-// @ts-ignore
-const onChangeSearchInput = (event) => {
-  filters.searchQuery = event.target.value
 }
 
 onMounted(async () => {
-  const localCart = localStorage.getItem('cart')
-  cart.value = localCart ? JSON.parse(localCart) : []
   await fetchItems()
   await fetchFavorites()
-  //@ts-ignore
   items.value = items.value.map((item) => ({
-    //@ts-ignore
     ...item,
-    //@ts-ignore
     isAdded: cart.value.some((cartItem) => cartItem.id === item.id)
   }))
 })
-//@ts-ignore
 
 watch(cart, () => {
-  //@ts-ignore
   items.value = items.value.map((item) => ({
-    //@ts-ignore
     ...item,
     isAdded: false
   }))
@@ -145,6 +76,6 @@ watch(filters, fetchItems)
     </div>
   </div>
   <div class="mt-10">
-    <CardList :items="items" @add-to-favorite="addToFavorite" @add-to-cart="onClickAddPlus" />
+    <CardList :items="items" />
   </div>
 </template>

@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { inject } from 'vue'
 
-// @ts-ignore
-const { closeDrawer } = inject('cart')
+const { closeDrawer } = inject('cart') as {
+    closeDrawer: () => void
+}
 </script>
 
 <template>
