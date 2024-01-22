@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { Divider as AntDivider } from 'ant-design-vue'
 const emit = defineEmits(['openDrawer'])
 
 defineProps({
@@ -7,7 +8,7 @@ defineProps({
 </script>
 
 <template>
-  <header class="flex justify-between border-b border-slate-300 px-10 py-8">
+  <header class="flex justify-between px-10 py-8">
     <router-link to="/">
       <div class="flex items-center gap-4">
         <img src="/logo.png" alt="Logo" class="w-10" />
@@ -38,4 +39,5 @@ defineProps({
       </li>
     </ul>
   </header>
+  <AntDivider></AntDivider>
 </template>

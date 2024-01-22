@@ -1,37 +1,46 @@
 <script setup lang="ts">
 import { inject } from 'vue'
+import { Button as AntButton } from 'ant-design-vue'
+import { ArrowLeftOutlined } from '@ant-design/icons-vue'
 
 const { closeDrawer } = inject('cart') as {
-    closeDrawer: () => void
+  closeDrawer: () => void
 }
 </script>
 
 <template>
-  <div class="flex items-center gap-3 mb-8">
-    <svg
-      @click="closeDrawer"
-      class="opacity-30 cursor-pointer rotate-180 hover:opacity-100 transition hover:-translate-1"
-      width="16"
-      height="14"
-      viewBox="0 0 16 14"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        d="M1 7H14.7143"
-        stroke="black"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      />
-      <path
-        d="M8.71436 1L14.7144 7L8.71436 13"
-        stroke="black"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      />
-    </svg>
+  <div class="drawer-head">
+    <ant-button @click="closeDrawer" class="drawer-head__button">
+      <arrow-left-outlined class="drawer-head__icon" :rotate="180" />
+    </ant-button>
     <h2 class="text-2xl font-bold">Корзина</h2>
   </div>
 </template>
+
+<style scoped>
+.drawer-head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+  border: none;
+}
+
+.drawer-head__button {
+  opacity: 30;
+  cursor: pointer;
+  transform: rotate(180deg);
+  border: none;
+}
+
+.drawer-head__button:hover {
+  transition: 0.3s;
+  translate: -3px;
+}
+
+.drawer-head__icon {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+}
+</style>

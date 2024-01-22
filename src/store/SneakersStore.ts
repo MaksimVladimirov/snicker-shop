@@ -17,16 +17,18 @@ type SneakerParams = {
   title?: string
 }
 
+export interface FiltersParams {
+    sortBy: string
+    searchQuery: string
+}
+
 export const useSneakersStore = defineStore('sneakers', {
   state: () => ({
     items: [] as SnickersInfo[],
     filters: {
       sortBy: 'title',
       searchQuery: ''
-    } as {
-      sortBy: string
-      searchQuery: string
-    }
+    } as FiltersParams
   }),
 
   actions: {

@@ -1,7 +1,8 @@
 import { createApp } from 'vue'
 import { createRouter, createWebHistory } from 'vue-router'
 import { autoAnimatePlugin } from '@formkit/auto-animate/vue'
-import { createPinia } from 'pinia';
+import { createPinia } from 'pinia'
+import ElementPlus from 'element-plus'
 
 import App from './App.vue'
 import Home from './pages/Home.vue'
@@ -22,4 +23,5 @@ const pinia = createPinia()
 app.use(router)
 app.use(autoAnimatePlugin)
 app.use(pinia)
+app.use(ElementPlus)
 app.mount('#app')

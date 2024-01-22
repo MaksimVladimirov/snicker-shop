@@ -1,9 +1,11 @@
 <script setup lang="ts">
-import { onMounted, reactive, watch } from 'vue'
+import { onMounted, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import CardList from '../components/CardList.vue'
 import { useSneakersStore } from '../store/SneakersStore'
 import { useCartStore } from '@/store/CartStore'
+import { Select as AntSelect } from 'ant-design-vue'
+import { Input as AntInput } from 'ant-design-vue'
 
 const { items, filters } = storeToRefs(useSneakersStore())
 const { fetchItems, fetchFavorites } = useSneakersStore()
@@ -31,10 +33,8 @@ const onChangeSearchInput = (event: Event) => {
   }
 }
 
-const onChangeSelect = (event: Event) => {
-  if (event.target instanceof HTMLSelectElement) {
-    filters.value.sortBy = event.target.value
-  }
+const onChangeSelect = (value: any) => {
+  filters.value.sortBy = value
 }
 
 onMounted(async () => {
@@ -53,29 +53,34 @@ watch(cart, () => {
   }))
 })
 
-watch(filters, fetchItems)
+watch(filters.value, fetchItems)
 </script>
 
 <template>
   <div class="flex justify-between items-center">
     <h2 class="text-3xl font-bold mb-8">Все кросовки</h2>
     <div class="flex gap-4">
-      <select @change="onChangeSelect" id="" class="py-2 px-3 border rounded-md outline-none">
-        <option value="name">По названию</option>
-        <option value="price">По цене (дешевые)</option>
-        <option value="-price">По цене (дорогие)</option>
-      </select>
-      <div class="relative">
+      <ant-select @change="onChangeSelect" class="ant-select" placeholder="Сортировать по">
+        <a-select-option value="name">По названию</a-select-option>
+        <a-select-option value="price">По цене (дешевые)</a-select-option>
+        <a-select-option value="-price">По цене (дорогие)</a-select-option>
+      </ant-select>
+      <ant-input class="ant-input" placeholder="Поиск" @input="onChangeSearchInput" :allowClear="true" style="">
         <img src="/search.svg" alt="Search" class="absolute left-3 top-2.5" />
-        <input
-          @input="onChangeSearchInput"
-          class="border rounded-md py-1.5 pl-11 pr-4 outline-none focus:border-gray-400"
-          placeholder="Поиск"
-        />
-      </div>
+      </ant-input>
     </div>
   </div>
   <div class="mt-10">
     <CardList :items="items" />
   </div>
 </template>
+
+<style>
+.ant-select {
+  width: 180px;
+}
+
+.ant-input {
+    width: 220px;
+}
+</style>
