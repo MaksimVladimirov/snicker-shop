@@ -3,21 +3,18 @@ import axios from 'axios'
 import DrawerHead from './DrawerHead.vue'
 import CartItemList from './CartItemList.vue'
 import InfoBlock from './InfoBlock.vue'
-import { ref, inject, computed } from 'vue'
-import type { SnickersInfo } from '@/pages/Home.vue'
+import { ref, computed } from 'vue'
+import { useCartStore } from '@/store/CartStore'
 
 const props = defineProps({
   totalPrice: Number,
   vatPrice: Number
 })
 
-const { cart } = inject('cart') as {
-  cart: SnickersInfo[]
-}
-const isButtonDisabled = computed(() => isCreating.value || cartIsEmpty.value)
-//@ts-ignore
+let { cart } = useCartStore()
 
-const cartIsEmpty = computed(() => cart.value.length === 0)
+const isButtonDisabled = computed(() => isCreating.value || cartIsEmpty.value)
+const cartIsEmpty = computed(() => cart.length === 0)
 const isCreating = ref(false)
 const orderId = ref(null)
 
@@ -25,16 +22,11 @@ const createOrder = async () => {
   try {
     isCreating.value = true
     const { data } = await axios.post(`https://9e5263ce0c7354f2.mokky.dev/orders`, {
-      //@ts-ignore
-
-      items: cart.value,
-      //@ts-ignore
-
+      items: cart,
+    //@ts-ignore
       totalPrice: props.totalPrice.value
     })
-    //@ts-ignore
-
-    cart.value = []
+    cart = []
     orderId.value = data.id
     return data
   } catch (err) {
