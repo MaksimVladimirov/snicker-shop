@@ -1,30 +1,14 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
-import type { FavoritesInfo } from '@/pages/Home.vue'
 
-export interface SnickersInfo {
-  id: number
-  title: string
-  price: number
-  imageUrl: string
-  isFavorite?: boolean
-  isAdded?: boolean
-  favoriteId?: null | number
-}
-
-type SneakerParams = {
-  sortBy: string
-  title?: string
-}
-
-export interface FiltersParams {
-    sortBy: string
-    searchQuery: string
-}
+import type { SneakersParams } from '@/types/SneakersParams'
+import type { FiltersParams } from '@/types/FiltersParams'
+import type { ISneakers } from '@/types/ISneakers'
+import type { IFavorites } from '@/types/IFilters'
 
 export const useSneakersStore = defineStore('sneakers', {
   state: () => ({
-    items: [] as SnickersInfo[],
+    items: [] as ISneakers[],
     filters: {
       sortBy: 'title',
       searchQuery: ''
@@ -34,7 +18,7 @@ export const useSneakersStore = defineStore('sneakers', {
   actions: {
     async fetchItems() {
       try {
-        const params: SneakerParams = {
+        const params: SneakersParams = {
           sortBy: this.filters.sortBy
         }
 
@@ -46,7 +30,7 @@ export const useSneakersStore = defineStore('sneakers', {
           params
         })
 
-        this.items = data.map((obj: SnickersInfo) => ({
+        this.items = data.map((obj: ISneakers) => ({
           ...obj,
           isFavorite: false,
           isAdded: false,
@@ -61,9 +45,7 @@ export const useSneakersStore = defineStore('sneakers', {
       try {
         const { data: favorites } = await axios.get('https://9e5263ce0c7354f2.mokky.dev/favorites')
         this.items = this.items.map((item) => {
-          const favorite = favorites.find(
-            (favorite: FavoritesInfo) => favorite.sneaker_id === item.id
-          )
+          const favorite = favorites.find((favorite: IFavorites) => favorite.sneaker_id === item.id)
           if (!favorite) {
             return item
           }

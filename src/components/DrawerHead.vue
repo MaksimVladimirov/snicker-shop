@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { inject } from 'vue'
-import { Button as AntButton } from 'ant-design-vue'
+
 import { ArrowLeftOutlined } from '@ant-design/icons-vue'
+import { Button as AntButton } from 'ant-design-vue'
 
 const { closeDrawer } = inject('cart') as {
   closeDrawer: () => void
@@ -39,8 +40,8 @@ const { closeDrawer } = inject('cart') as {
 }
 
 .drawer-head__icon {
-    display: flex;
-    align-items: center;
-    font-size: 16px;
+  display: flex;
+  align-items: center;
+  font-size: 16px;
 }
 </style>

@@ -1,24 +1,25 @@
 import { defineStore } from 'pinia'
-import type { SnickersInfo } from './SneakersStore'
 import axios from 'axios'
+
+import type { ISneakers } from '@/types/ISneakers'
 
 export const useCartStore = defineStore('cart', {
   state: () => ({
-    cart: [] as SnickersInfo[]
+    cart: [] as ISneakers[]
   }),
 
   actions: {
-    addToCart(item: SnickersInfo) {
+    addToCart(item: ISneakers) {
       this.cart.push(item)
       item.isAdded = true
     },
 
-    removeFromCart(item: SnickersInfo) {
+    removeFromCart(item: ISneakers) {
       this.cart.splice(this.cart.indexOf(item), 1)
       item.isAdded = false
     },
 
-    async addToFavorite(item: SnickersInfo) {
+    async addToFavorite(item: ISneakers) {
       try {
         if (!item.isFavorite) {
           const obj = {

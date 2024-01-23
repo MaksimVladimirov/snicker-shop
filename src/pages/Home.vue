@@ -1,31 +1,16 @@
 <script setup lang="ts">
 import { onMounted, watch } from 'vue'
 import { storeToRefs } from 'pinia'
-import CardList from '../components/CardList.vue'
+
 import { useSneakersStore } from '../store/SneakersStore'
-import { useCartStore } from '@/store/CartStore'
 import { Select as AntSelect } from 'ant-design-vue'
 import { Input as AntInput } from 'ant-design-vue'
+import CardList from '../components/CardList.vue'
+import { useCartStore } from '@/store/CartStore'
 
 const { items, filters } = storeToRefs(useSneakersStore())
 const { fetchItems, fetchFavorites } = useSneakersStore()
-
 const { cart } = storeToRefs(useCartStore())
-
-export interface SnickersInfo {
-  id: number
-  title: string
-  price: number
-  imageUrl: string
-  isFavorite?: boolean
-  isAdded?: boolean
-  favoriteId?: null | number
-}
-
-export interface FavoritesInfo {
-  sneaker_id: number
-  id: number
-}
 
 const onChangeSearchInput = (event: Event) => {
   if (event.target instanceof HTMLInputElement) {
@@ -65,7 +50,13 @@ watch(filters.value, fetchItems)
         <a-select-option value="price">По цене (дешевые)</a-select-option>
         <a-select-option value="-price">По цене (дорогие)</a-select-option>
       </ant-select>
-      <ant-input class="ant-input" placeholder="Поиск" @input="onChangeSearchInput" :allowClear="true" style="">
+      <ant-input
+        class="ant-input"
+        placeholder="Поиск"
+        @input="onChangeSearchInput"
+        :allowClear="true"
+        style=""
+      >
         <img src="/search.svg" alt="Search" class="absolute left-3 top-2.5" />
       </ant-input>
     </div>
@@ -81,6 +72,6 @@ watch(filters.value, fetchItems)
 }
 
 .ant-input {
-    width: 220px;
+  width: 220px;
 }
 </style>

@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { computed, provide, ref, watch } from 'vue'
+
+import { useCartStore } from './store/CartStore'
 import Header from './components/Header.vue'
 import Drawer from './components/Drawer.vue'
-import { useCartStore } from './store/CartStore'
 
 const { cart } = useCartStore()
 const isDrawerOpen = ref(false)
@@ -31,7 +32,6 @@ provide('cart', {
 
 <template>
   <Drawer v-if="isDrawerOpen" :total-price="totalPrice" :vat-price="vatPrice" />
-
   <div class="bg-white w-4/5 m-auto rounded-xl shadow-xl mt-14">
     <Header @open-drawer="openDrawer" :total-price="totalPrice" />
     <div class="p-10">

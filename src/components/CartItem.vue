@@ -1,12 +1,12 @@
 <script setup lang="ts">
-const emit = defineEmits(['onClickRemove'])
-
 defineProps({
   title: String,
   imageUrl: String,
   price: Number,
   id: Number
 })
+
+const emit = defineEmits(['onClickRemove'])
 </script>
 
 <template>

@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { Divider as AntDivider } from 'ant-design-vue'
-const emit = defineEmits(['openDrawer'])
 
 defineProps({
   totalPrice: Number
 })
+
+const emit = defineEmits(['openDrawer'])
 </script>
 
 <template>

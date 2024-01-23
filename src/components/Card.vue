@@ -1,14 +1,14 @@
 <script setup lang="ts">
 defineProps({
-    //@ts-ignore
-  title: String,
-  imageUrl: String,
-  price: Number,
+  // @ts-ignore
   isFavorite: Boolean,
+  imageUrl: String,
   isAdded: Boolean,
+  title: String,
+  price: Number,
   id: Number,
-  onClickAdd: Function as any as (payload: MouseEvent) => void,
-  onClickFavorite: Function as any as (payload: MouseEvent) => void
+  onClickFavorite: Function as any as (payload: MouseEvent) => void,
+  onClickAdd: Function as any as (payload: MouseEvent) => void
 })
 </script>
 
@@ -30,7 +30,12 @@ defineProps({
         <span class="text-slate-400"> Цена: </span>
         <b> {{ price }}</b>
       </div>
-      <img v-if="onClickAdd" :src="!isAdded ? '/plus.svg' : '/checked.svg'" alt="Plus" @click="onClickAdd" />
+      <img
+        v-if="onClickAdd"
+        :src="!isAdded ? '/plus.svg' : '/checked.svg'"
+        alt="Plus"
+        @click="onClickAdd"
+      />
     </div>
   </div>
 </template>

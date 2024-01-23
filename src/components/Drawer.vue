@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import axios from 'axios'
-import DrawerHead from './DrawerHead.vue'
-import CartItemList from './CartItemList.vue'
-import InfoBlock from './InfoBlock.vue'
 import { ref, computed } from 'vue'
+import axios from 'axios'
+
 import { useCartStore } from '@/store/CartStore'
+import CartItemList from './CartItemList.vue'
+import DrawerHead from './DrawerHead.vue'
+import InfoBlock from './InfoBlock.vue'
 
 const props = defineProps({
   totalPrice: Number,

@@ -1,23 +1,22 @@
 <script setup lang="ts">
-import type { SnickersInfo } from '@/pages/Home.vue'
-import Card from './Card.vue'
+import type { ISneakers } from '@/types/ISneakers'
 import { useCartStore } from '@/store/CartStore'
-
-const { addToCart, removeFromCart, addToFavorite } = useCartStore()
+import Card from './Card.vue'
 
 defineProps({
-  items: Array<SnickersInfo>,
+  items: Array<ISneakers>,
   isFavorites: Boolean
 })
 
-const onClickAddPlus = (item: SnickersInfo) => {
+const { addToCart, removeFromCart, addToFavorite } = useCartStore()
+
+const onClickAddPlus = (item: ISneakers) => {
   if (!item.isAdded) {
     addToCart(item)
   } else {
     removeFromCart(item)
   }
 }
-
 </script>
 
 <template>
