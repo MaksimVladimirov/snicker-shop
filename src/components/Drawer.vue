@@ -6,16 +6,17 @@ import { useCartStore } from '@/store/CartStore'
 import CartItemList from './CartItemList.vue'
 import DrawerHead from './DrawerHead.vue'
 import InfoBlock from './InfoBlock.vue'
+import { storeToRefs } from 'pinia'
 
 const props = defineProps({
   totalPrice: Number,
   vatPrice: Number
 })
 
-let { cart } = useCartStore()
+const { cart } = storeToRefs(useCartStore())
 
 const isButtonDisabled = computed(() => isCreating.value || cartIsEmpty.value)
-const cartIsEmpty = computed(() => cart.length === 0)
+const cartIsEmpty = computed(() => cart.value.length === 0)
 const isCreating = ref(false)
 const orderId = ref(null)
 
@@ -27,7 +28,7 @@ const createOrder = async () => {
       //@ts-ignore
       totalPrice: props.totalPrice.value
     })
-    cart = []
+    cart.value = []
     orderId.value = data.id
     return data
   } catch (err) {
