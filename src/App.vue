@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { computed, provide, ref, watch } from 'vue'
-import { storeToRefs } from 'pinia';
+import { storeToRefs } from 'pinia'
 
 import { useCartStore } from './store/CartStore'
-import Header from './components/Header.vue'
-import Drawer from './components/Drawer.vue'
+import Header from '@/components/Header/Header.vue'
+import Drawer from '@/components/Drawer/Drawer.vue'
 
 const { cart } = storeToRefs(useCartStore())
 const isDrawerOpen = ref(false)
@@ -19,12 +19,13 @@ const openDrawer = () => {
 }
 
 watch(
-  cart,
+  cart.value,
   () => {
-    localStorage.setItem('cart', JSON.stringify(cart))
+    localStorage.setItem('cart', JSON.stringify(cart.value))
   },
   { deep: true }
 )
+
 provide('cart', {
   closeDrawer,
   openDrawer

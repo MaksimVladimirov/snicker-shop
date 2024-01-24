@@ -1,34 +1,30 @@
 <script setup lang="ts">
+import { Button as AntButton } from 'ant-design-vue'
 import { ref, computed } from 'vue'
 import axios from 'axios'
 
+import type { DrawerProps } from './DrawerProps'
 import { useCartStore } from '@/store/CartStore'
-import CartItemList from './CartItemList.vue'
-import DrawerHead from './DrawerHead.vue'
-import InfoBlock from './InfoBlock.vue'
-import { storeToRefs } from 'pinia'
+import CartItemList from '../CartItemList/CartItemList.vue'
+import DrawerHead from '../DrawerHead/DrawerHead.vue'
+import InfoBlock from '../InfoBlock/InfoBlock.vue'
 
-const props = defineProps({
-  totalPrice: Number,
-  vatPrice: Number
-})
+const props = defineProps<DrawerProps>()
 
-const { cart } = storeToRefs(useCartStore())
-
+const cartStore = useCartStore()
 const isButtonDisabled = computed(() => isCreating.value || cartIsEmpty.value)
-const cartIsEmpty = computed(() => cart.value.length === 0)
-const isCreating = ref(false)
-const orderId = ref(null)
+const cartIsEmpty = computed(() => cartStore.cart.length === 0)
+const isCreating = ref<boolean>(false)
+const orderId = ref<null | number>(null)
 
 const createOrder = async () => {
   try {
     isCreating.value = true
     const { data } = await axios.post(`https://9e5263ce0c7354f2.mokky.dev/orders`, {
-      items: cart,
-      //@ts-ignore
-      totalPrice: props.totalPrice.value
+      items: cartStore.cart,
+      totalPrice: props.totalPrice
     })
-    cart.value = []
+    cartStore.$reset()
     orderId.value = data.id
     return data
   } catch (err) {
@@ -73,14 +69,32 @@ const createOrder = async () => {
           <div class="flex-1 border-b border-dashed"></div>
           <b>{{ vatPrice }} rub</b>
         </div>
-        <button
+        <AntButton
           :disabled="isButtonDisabled"
           @click="createOrder"
-          class="mt-4 bg-lime-500 w-full rounded-xl py-3 text-white transition hover:bg-lime-600 action:bg-lime-700 disabled:bg-slate-300 cursor-pointer"
+          class="drawer__set-order-button"
         >
           Оформить заказ
-        </button>
+        </AntButton>
       </div>
     </div>
   </div>
 </template>
+
+<style scoped>
+.drawer__set-order-button {
+  margin-top: 20px;
+  width: 100%;
+  border-radius: 10px;
+  cursor: pointer;
+  height: 44px;
+  background: rgb(6, 199, 6) !important;
+  color: aliceblue !important;
+  border: none !important;
+  transition: 0.6s;
+}
+.drawer__set-order-button:hover {
+  background: rgb(22, 164, 22) !important;
+}
+</style>
+./DrawerProps

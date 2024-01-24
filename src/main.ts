@@ -4,8 +4,8 @@ import ElementPlus from 'element-plus'
 import { createPinia } from 'pinia'
 import { createApp } from 'vue'
 
-import Favorites from './pages/Favorites.vue'
-import Home from './pages/Home.vue'
+import Favorites from '@/pages/Favorites/Favorites.vue'
+import Home from '@/pages/Home/Home.vue'
 import App from './App.vue'
 import './assets/main.css'
 

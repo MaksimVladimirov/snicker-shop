@@ -1,13 +1,9 @@
 <script setup lang="ts">
 import type { ISneakers } from '@/types/ISneakers'
 import { useCartStore } from '@/store/CartStore'
-import Card from './Card.vue'
+import type { CardListProps } from './CardListProps';
 
-defineProps({
-  items: Array<ISneakers>,
-  isFavorites: Boolean
-})
-
+defineProps<CardListProps>()
 const { addToCart, removeFromCart, addToFavorite } = useCartStore()
 
 const onClickAddPlus = (item: ISneakers) => {

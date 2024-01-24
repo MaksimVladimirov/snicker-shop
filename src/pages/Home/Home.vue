@@ -1,16 +1,18 @@
 <script setup lang="ts">
-import { onMounted, watch } from 'vue'
+import { watch, onBeforeMount, ref } from 'vue'
 import { storeToRefs } from 'pinia'
+import { Spin as AntSpin } from 'ant-design-vue'
 
-import { useSneakersStore } from '../store/SneakersStore'
+import { useSneakersStore } from '@/store/SneakersStore'
 import { Select as AntSelect } from 'ant-design-vue'
 import { Input as AntInput } from 'ant-design-vue'
-import CardList from '../components/CardList.vue'
+import CardList from '@/components/CardList/CardList.vue'
 import { useCartStore } from '@/store/CartStore'
 
 const { items, filters } = storeToRefs(useSneakersStore())
 const { fetchItems, fetchFavorites } = useSneakersStore()
 const { cart } = storeToRefs(useCartStore())
+const isLoading = ref<boolean>(false)
 
 const onChangeSearchInput = (event: Event) => {
   if (event.target instanceof HTMLInputElement) {
@@ -22,13 +24,15 @@ const onChangeSelect = (value: any) => {
   filters.value.sortBy = value
 }
 
-onMounted(async () => {
+onBeforeMount(async () => {
+  isLoading.value = true
   await fetchItems()
   await fetchFavorites()
   items.value = items.value.map((item) => ({
     ...item,
     isAdded: cart.value.some((cartItem) => cartItem.id === item.id)
   }))
+  isLoading.value = false
 })
 
 watch(cart, () => {
@@ -55,22 +59,22 @@ watch(filters.value, fetchItems)
         placeholder="Поиск"
         @input="onChangeSearchInput"
         :allowClear="true"
-        style=""
       >
         <img src="/search.svg" alt="Search" class="absolute left-3 top-2.5" />
       </ant-input>
     </div>
   </div>
   <div class="mt-10">
-    <CardList :items="items" />
+    <ant-spin :spinning="isLoading">
+      <CardList :items="items" />
+    </ant-spin>
   </div>
 </template>
 
-<style>
+<style scoped>
 .ant-select {
   width: 180px;
 }
-
 .ant-input {
   width: 220px;
 }

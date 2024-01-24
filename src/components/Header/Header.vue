@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import { Divider as AntDivider } from 'ant-design-vue'
+import type { HeaderProps } from './HeaderProps'
 
-defineProps({
-  totalPrice: Number
-})
+defineProps<HeaderProps>()
 
 const emit = defineEmits(['openDrawer'])
 </script>

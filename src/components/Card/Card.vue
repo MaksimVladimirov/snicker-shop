@@ -1,15 +1,7 @@
 <script setup lang="ts">
-defineProps({
-  // @ts-ignore
-  isFavorite: Boolean,
-  imageUrl: String,
-  isAdded: Boolean,
-  title: String,
-  price: Number,
-  id: Number,
-  onClickFavorite: Function as any as (payload: MouseEvent) => void,
-  onClickAdd: Function as any as (payload: MouseEvent) => void
-})
+import type { CardProps } from './CardProps';
+
+defineProps<CardProps>()
 </script>
 
 <template>

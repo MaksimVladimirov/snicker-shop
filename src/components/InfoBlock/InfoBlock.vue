@@ -1,9 +1,7 @@
 <script setup lang="ts">
-defineProps({
-  title: String,
-  imageUrl: String,
-  description: String
-})
+import type { InfoBlockProps } from './InfoBlockProps'
+
+defineProps<InfoBlockProps>()
 </script>
 
 <template>

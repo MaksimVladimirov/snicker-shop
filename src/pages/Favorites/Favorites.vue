@@ -2,22 +2,17 @@
 import { onMounted, ref } from 'vue'
 import axios from 'axios'
 
-import type { ISneakers } from '@/types/ISneakers'
-import CardList from '../components/CardList.vue'
+import CardList from '@/components/CardList/CardList.vue'
+import type { FavoritesInfo } from './FavoritesInfo';
 
 const favorites = ref([])
-
-type SneakersInfo = {
-  id: number
-  sneaker: ISneakers
-}
 
 onMounted(async () => {
   try {
     const { data } = await axios.get(
       'https://9e5263ce0c7354f2.mokky.dev/favorites?_relations=sneakers'
     )
-    favorites.value = data.map((obj: SneakersInfo) => obj.sneaker)
+    favorites.value = data.map((obj: FavoritesInfo) => obj.sneaker)
   } catch (err) {
     console.error(err)
   }
