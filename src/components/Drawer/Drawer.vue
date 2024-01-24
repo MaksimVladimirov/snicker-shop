@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Button as AntButton } from 'ant-design-vue'
+import { ElButton } from 'element-plus'
 import { ref, computed } from 'vue'
 import axios from 'axios'
 
@@ -76,6 +77,9 @@ const createOrder = async () => {
         >
           Оформить заказ
         </AntButton>
+        <el-Button :disabled="isButtonDisabled" @click="createOrder" type="success" size="small">
+          Оформить заказ
+        </el-Button>
       </div>
     </div>
   </div>
@@ -94,7 +98,28 @@ const createOrder = async () => {
   transition: 0.6s;
 }
 .drawer__set-order-button:hover {
-  background: rgb(22, 164, 22) !important;
+  background: rgb(108, 216, 108) !important;
+}
+.el-button--success {
+  margin-top: 20px;
+  border-radius: 10px;
+  cursor: pointer;
+  height: 44px;
+  background: rgb(6, 199, 6);
+  color: aliceblue;
+  border: none;
+  transition: 0.6s;
+}
+.el-button--success:hover {
+  background: rgb(108, 216, 108);
+}
+.el-button--small {
+  font-size: 14px;
+  width: 60%;
+}
+
+.el-button--default {
+  font-size: 16px;
+  width: 80%;
 }
 </style>
-./DrawerProps
